@@ -42,10 +42,7 @@ void zhuravlevama::lab1()
  */
 void zhuravlevama::lab2()
 {
-        //меняем местами строки
-
-
-    double obrv1=0,obrv0=0;///obrv1-число,преобр. эл-т в 1 obrv0-в 0
+   double obrv1=0,obrv0=0;///obrv1-число,преобр. эл-т в 1 obrv0-в 0
 ///прямой ход
    for(int m=0;m<N;m++)///m-строка
     {
@@ -86,17 +83,49 @@ void zhuravlevama::lab2()
 }
 
 
-
-
-
-
-
 /**
  * Метод квадратного корня (метод Холецкого)
  */
 void zhuravlevama::lab3()
 {
+ double **L=new double*[N];
+ for(int i=0;i<N;i++){L[i]=new double[N];}
+ for(int i=0;i<N;i++)
+     for(int j=0;j<N;j++)
+         L[i][j]=A[i][j];
 
+ double*y=new double[N];
+
+ for(int i=0;i<N;i++)
+    {
+     for(int j=0;j<i;j++)
+         L[i][i]-=L[i][j]*L[i][j];
+
+     L[i][i]=sqrt(L[i][i]);
+     for(int k=i+1;k<N;k++)
+        {
+         for(int j=0;j<i;j++)
+             L[k][i]-=L[i][j]*L[k][j];
+         L[k][i]/=L[i][i];
+        }
+    }
+ double temp=0;
+ y[0]=b[0]/L[0][0];
+ for(int i=1;i<N;i++)
+    {
+     for(int k=0;k<i;k++)
+         temp+=L[i][k]*y[k];
+     y[i]=(b[i]-temp)/L[i][i];
+     temp=0;
+    }
+ x[N-1]=y[N-1]/L[N-1][N-1];
+ for(int i=N-2;i>=0;i--)
+    {
+     for(int k=i+1;k<N;k++)
+         temp+=L[k][i]*x[k];
+     x[i]=(y[i]-temp)/L[i][i];
+     temp=0;
+    }
 }
 
 
@@ -212,7 +241,7 @@ void zhuravlevama::lab6()
 			for (int i=0;i<N;i++)
 				pr+=(x[i]-px[i])*(x[i]-px[i]);
 		}
-	} while(pr>=eps);
+	} while(sqrt(pr)>=eps);
 
 }
 
@@ -222,16 +251,6 @@ void zhuravlevama::lab6()
  * Один из градиентных методов
  */
 void zhuravlevama::lab7()
-{
-
-}
-
-
-
-/**
- * Один из градиентных методов
- */
-void zhuravlevama::lab8()
 {
 
 }
